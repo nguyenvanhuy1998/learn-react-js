@@ -1,19 +1,14 @@
-import logo from './logo.svg'
 import './App.css'
+import BareInput from './BareInput'
+import Layout from './Layout'
 
 function App() {
   return (
     <div className='App'>
-      <h1>Created by Nguyen Van Huy</h1>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
+      <Layout>
+        <h1>Hello</h1>
+        <BareInput type='password' value='100' autoFocus className='input-control' onChange={() => {}} />
+      </Layout>
     </div>
   )
 }
