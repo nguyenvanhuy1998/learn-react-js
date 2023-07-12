@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const initialAddress = () => {
-  console.log('initialAddress')
   return {
     nation: 'Vietnam',
     city: {
@@ -10,12 +9,58 @@ const initialAddress = () => {
     }
   }
 }
+const getAddress = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        nation: 'USA',
+        city: {
+          street: '100, Nicolas, NY',
+          house: 'Building'
+        }
+      })
+    }, 3000)
+  })
+}
+const profile = {}
 
 function User() {
   const [firstName] = useState('Alex')
   const [age, setAge] = useState(24)
   const [address, setAddress] = useState(initialAddress)
   const [, forceRerender] = useState(0)
+  // Giống componentDidUpdate, effect function chạy lại
+  //  mỗi khi component re-render
+  //   useEffect(() => {
+  //     console.log(document.getElementsByTagName('li'))
+  //     console.log('useEffect giống componentDidUpdate')
+  //   })
+
+  useEffect(() => {
+    console.log('useEffect giống componentDidMount')
+    console.log(profile)
+    getAddress().then((res) => {
+      //   const newAddress = { ...address }
+      //   newAddress.city = res.city
+      //   setAddress(newAddress)
+      setAddress((prevAddress) => {
+        const newAddress = { ...prevAddress }
+        newAddress.city = res.city
+        return newAddress
+      })
+    })
+    // Clean up function
+    return () => {
+      console.log('Huy goi api')
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log('age', age)
+    return () => {
+      console.log('Clean Age')
+    }
+  }, [age])
 
   const changeStreet = () => {
     // Cach 1
@@ -39,7 +84,7 @@ function User() {
     setAge((prevAge) => prevAge + 1)
   }
   const reRender = () => forceRerender((prevState) => prevState + 1)
-  console.log('Re-render')
+  console.log('re-render')
   return (
     <div>
       <h1>User Functional Component</h1>
