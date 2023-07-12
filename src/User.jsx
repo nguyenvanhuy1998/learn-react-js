@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
+import UserProfile from './UserProfile'
 
 const initialAddress = () => {
   return {
@@ -23,7 +24,7 @@ const getAddress = () => {
   })
 }
 const profile = {}
-
+export const UserContext = createContext()
 function User() {
   const [firstName] = useState('Alex')
   const [age, setAge] = useState(24)
@@ -37,8 +38,8 @@ function User() {
   //   })
 
   useEffect(() => {
-    console.log('useEffect giống componentDidMount')
-    console.log(profile)
+    // console.log('useEffect giống componentDidMount')
+    // console.log(profile)
     getAddress().then((res) => {
       //   const newAddress = { ...address }
       //   newAddress.city = res.city
@@ -55,12 +56,12 @@ function User() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log('age', age)
-    return () => {
-      console.log('Clean Age')
-    }
-  }, [age])
+  // useEffect(() => {
+  //   console.log('age', age)
+  //   return () => {
+  //     console.log('Clean Age')
+  //   }
+  // }, [age])
 
   const changeStreet = () => {
     // Cach 1
@@ -84,18 +85,20 @@ function User() {
     setAge((prevAge) => prevAge + 1)
   }
   const reRender = () => forceRerender((prevState) => prevState + 1)
-  console.log('re-render')
+  // console.log('re-render')
   return (
     <div>
       <h1>User Functional Component</h1>
-      <ul>
-        <li>First Name: {firstName}</li>
-        <li>Age: {age}</li>
-        <li>Nation: {address.nation}</li>
-        <li>Street: {address.city.street}</li>
-        <li>House: {address.city.house}</li>
-      </ul>
-      <button onClick={increaseAge}>Increase Age</button>
+      <UserContext.Provider
+        value={{
+          address,
+          age,
+          firstName,
+          increaseAge
+        }}
+      >
+        <UserProfile />
+      </UserContext.Provider>
       <button onClick={reRender}>Rerender</button>
       <button onClick={changeStreet}>Change Street</button>
     </div>
